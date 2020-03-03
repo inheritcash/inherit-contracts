@@ -1,4 +1,5 @@
 # Inherit
+## * Experimental Software *
 
 The purpose of this project is to provide a new and innovative smart contract + dapp frontend for crypto enthusiasts and beginners alike.
 
@@ -23,7 +24,16 @@ This project has been built up from various online sources including Open Zepell
 Install Ganache-cli first
 
 ```ganache-cli -i 15 -l 9000000```
+
+Install the project 
+
 ```yarn install```
+
+Compile the contracts 
+
 ```yarn compile```
+
+Run the simple unit tests
+
 ```yarn test```
 
