@@ -21,7 +21,7 @@ contract ERC20Handler {
 
   mapping(address => uint[]) public transactionIndexesToSender;
 
-  address principleAccount;
+  address public principleAccount;
 
   /**
   * List of all transfers successful or unsuccessful */
