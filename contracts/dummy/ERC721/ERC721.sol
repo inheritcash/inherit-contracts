@@ -1,9 +1,9 @@
 pragma solidity ^0.5.8;
 
-import "../../tokens/ERC721Interface.sol";
 import "../../safemath/SafeMath.sol";
 import "./Address.sol";
 import "./ERC165.sol";
+import "./ERC721Interface.sol";
 
 // Open Zepellin implementation
 /**

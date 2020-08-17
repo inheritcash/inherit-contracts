@@ -17,11 +17,12 @@ contract ERC20Handler {
   struct Erc20Token {
     uint256 index;
     uint256 totalWeiWithdrawn;
+    uint256 totalWeiBalanceMax;
   }
 
   mapping(address => uint[]) public transactionIndexesToSender;
 
-  address public principleAccount;
+  address principleAccount;
 
   /**
   * List of all transfers successful or unsuccessful */
@@ -35,15 +36,16 @@ contract ERC20Handler {
   event TransferFailed(address indexed from, address indexed to, uint256 amount);
 
   modifier onlyOwner() {
-    require(isOwner());
+    require(isOwner(), "Only owner");
     _;
   }
 
   function isOwner() public view returns (bool) {
     return msg.sender == principleAccount;
   }
+
   function addNewERC20Token(address contractAddress) public onlyOwner returns (bool) {
-    require(!checkIfErc20OnList(contractAddress));
+    require(!checkIfErc20OnList(contractAddress), "Erc20 already on list");
 
      erc20ContractAddressToTokenInfo[contractAddress].index = erc20TokenContracts.push(contractAddress).sub(1);
      erc20ContractAddressToTokenInfo[contractAddress].totalWeiWithdrawn = 0;
@@ -53,7 +55,7 @@ contract ERC20Handler {
  }
 
   function removeERC20Token(address contractAddress) public onlyOwner returns (bool) {
-    require(checkIfErc20OnList(contractAddress));
+    require(checkIfErc20OnList(contractAddress), "Erc20 not on list");
 
     uint256 rowToDelete = erc20ContractAddressToTokenInfo[contractAddress].index;
     address keyToMove = erc20TokenContracts[erc20TokenContracts.length-1];
@@ -63,39 +65,10 @@ contract ERC20Handler {
     delete(erc20ContractAddressToTokenInfo[contractAddress]);
 
     ERC20Interface thisErc20Token = ERC20Interface(contractAddress);
-    thisErc20Token.approve(address(this), 0); // TODO ************ Maybe we can rethink this.
+    thisErc20Token.approve(address(this), 0);
 
     return true;
  }
-
-// TODO Decide if this logic should be moved away from this class...
-  function transferTokensThatHaveBeenApprovedFromTheToAddress(address tokenContract, address to, uint256 amount) internal {
-    require(amount > 0);
-
-    address from = msg.sender;
-
-    ERC20Interface thisErc20Token = ERC20Interface(tokenContract);
-
-    uint256 transactionId = transactions.push(
-    Transfer({
-              contractAddress:  tokenContract,
-              to: to,
-              amount: amount,
-              failed: true
-    })
-   );
-    transactionIndexesToSender[from].push(transactionId - 1);
-
-    if(amount > thisErc20Token.allowance(from, address(this))) {
-    emit TransferFailed(from, to, amount);
-    revert();
-   }
-    thisErc20Token.transferFrom(from, to, amount);
-
-    transactions[transactionId - 1].failed = false;
-
-    emit TransferSuccessful(from, to, amount);
-   }
 
   function checkIfErc20OnList(address erc20Address) public view returns (bool isOnList) {
       if(erc20TokenContracts.length == 0) return false;
@@ -104,5 +77,9 @@ contract ERC20Handler {
 
   function getERC20ListLength() public view returns (uint256 count) {
     return erc20TokenContracts.length;
+  }
+
+  function getPrincipleAccount() public view returns (address principle) {
+    return principleAccount;
   }
 }

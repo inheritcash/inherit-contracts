@@ -13,7 +13,7 @@ The developer holds absolutely no responsibility for the usage of this project, 
 
 The developer can do nothing to retract, recover, or distribute any digital assets that are associated with the contract once it has been deployed by the user into the Ethereum blockchain. It is provided without any type of guarantee and can be used at the users own risk. 
 
-Any regulatory reprecussions as result of the use of this project is entirely the responsibility of the user, the developer has no control and holds no responsibility over these users actions and recommends that users comply with financial and digital regulations as per the district they live in. 
+Any regulatory reprecussions as result of the use of this project is entirely the responsibility of the user, the developer has no control and holds no responsibility over these users actions and recommends that users comply with financial and digital regulations as per the jurisdiction they live in. 
  
 This project presents control for blockchain actions of real life users, which can live on until the end of time.
 
@@ -21,9 +21,9 @@ This project has been built up from various online sources including Open Zepell
 
 ## Compile and run tests
 
-Install Ganache-cli first
+Install Ganache-cli first, allow unlimited contract size as it is a big one, needs to be deployed as an automated contract
 
-```ganache-cli -i 15 -l 9000000```
+```ganache-cli --allowUnlimitedContractSize```
 
 Install the project 
 

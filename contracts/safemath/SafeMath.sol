@@ -18,7 +18,7 @@ library SafeMath {
     }
 
     uint256 c = a * b;
-    require(c / a == b);
+    require(c / a == b, "Multiplication error");
 
     return c;
   }
@@ -37,7 +37,7 @@ library SafeMath {
     require(!(a == -1 && b == INT256_MIN)); // This is the only case of overflow not detected by the check below
 
     int256 c = a * b;
-    require(c / a == b);
+    require(c / a == b, "Multiplication error");
 
     return c;
   }
@@ -47,7 +47,7 @@ library SafeMath {
   */
   function div(uint256 a, uint256 b) internal pure returns (uint256) {
     // Solidity only automatically asserts when dividing by 0
-    require(b > 0);
+    require(b > 0, "Division error");
     uint256 c = a / b;
     // assert(a == b * c + a % b); // There is no case in which this doesn't hold
 
@@ -58,7 +58,7 @@ library SafeMath {
   * @dev Integer division of two signed integers truncating the quotient, reverts on division by zero.
   */
   function div(int256 a, int256 b) internal pure returns (int256) {
-    require(b != 0); // Solidity only automatically asserts when dividing by 0
+    require(b != 0, "Division error"); // Solidity only automatically asserts when dividing by 0
     require(!(b == -1 && a == INT256_MIN)); // This is the only case of overflow
 
     int256 c = a / b;
@@ -70,7 +70,7 @@ library SafeMath {
   * @dev Subtracts two unsigned integers, reverts on overflow (i.e. if subtrahend is greater than minuend).
   */
   function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-    require(b <= a);
+    require(b <= a, 'B greater than A, sub issue');
     uint256 c = a - b;
 
     return c;
@@ -81,7 +81,7 @@ library SafeMath {
   */
   function sub(int256 a, int256 b) internal pure returns (int256) {
     int256 c = a - b;
-    require((b >= 0 && c <= a) || (b < 0 && c > a));
+    require((b >= 0 && c <= a) || (b < 0 && c > a), 'Sub issue');
 
     return c;
   }
@@ -91,7 +91,7 @@ library SafeMath {
   */
   function add(uint256 a, uint256 b) internal pure returns (uint256) {
     uint256 c = a + b;
-    require(c >= a);
+    require(c >= a, "Add issue");
 
     return c;
   }
@@ -101,7 +101,7 @@ library SafeMath {
   */
   function add(int256 a, int256 b) internal pure returns (int256) {
     int256 c = a + b;
-    require((b >= 0 && c >= a) || (b < 0 && c < a));
+    require((b >= 0 && c >= a) || (b < 0 && c < a), "Add issue");
 
     return c;
   }
@@ -111,7 +111,7 @@ library SafeMath {
   * reverts when dividing by zero.
   */
   function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-    require(b != 0);
+    require(b != 0, "Modulo issue");
     return a % b;
   }
 }

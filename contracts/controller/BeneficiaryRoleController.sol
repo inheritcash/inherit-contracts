@@ -15,19 +15,19 @@ contract BeneficiaryRoleController is DeadOrAliveController {
 
   address[] private userIndex;
   mapping(address => Beneficiary) public userStructs;
-  address public defaultErc721ApprovedUser;
+  address payable public  defaultErc721ApprovedUser;
 
   event BeneficiaryAdded(address indexed beneficiary, bytes32 indexed nickname, bytes32 indexed email, uint index);
   event BeneficiaryRemoved(address indexed beneficiary, uint index);
   event BeneficiaryUpdated(address indexed beneficiary, bytes32 indexed nickname, bytes32 indexed email, uint index);
 
  modifier onlyBeneficiary() {
-       require(checkIfBeneficiary(msg.sender));
+       require(checkIfBeneficiary(msg.sender), "Must be beneficiary");
        _;
   }
 
   function addBeneficiary(address beneficiaryWallet, bytes32 beneficiaryNickname, bytes32 beneficiaryEmail, uint256 share) public onlyOwner returns (uint256 index) {
-      require(!checkIfBeneficiary(beneficiaryWallet));
+      require(!checkIfBeneficiary(beneficiaryWallet), "Beneficiary already added");
       userStructs[beneficiaryWallet].email = beneficiaryEmail;
       userStructs[beneficiaryWallet].nickname = beneficiaryNickname;
       userStructs[beneficiaryWallet].ethHasWithdrawn = 0;
@@ -39,7 +39,7 @@ contract BeneficiaryRoleController is DeadOrAliveController {
   }
 
   function removeBeneficiary(address beneficiaryWallet) public onlyOwner returns (uint256 index) {
-      require(checkIfBeneficiary(beneficiaryWallet));
+      require(checkIfBeneficiary(beneficiaryWallet), "Address not a beneficiary");
       uint rowToDelete = userStructs[beneficiaryWallet].index;
       address keyToMove = userIndex[userIndex.length-1];
       userIndex[rowToDelete] = keyToMove;
@@ -56,26 +56,26 @@ contract BeneficiaryRoleController is DeadOrAliveController {
   }
 
   function updateBeneficiaryNickname(address beneficiaryWallet, bytes32 beneficiaryNickname) public onlyOwner returns (bool success) {
-      require(checkIfBeneficiary(beneficiaryWallet));
+      require(checkIfBeneficiary(beneficiaryWallet), "Address not a beneficiary");
       userStructs[beneficiaryWallet].nickname = beneficiaryNickname;
-      
+
       // Button gets hit here as we know the owner is alive
       hitTheDamnButton();
 
       emit BeneficiaryUpdated(beneficiaryWallet, beneficiaryNickname, userStructs[beneficiaryWallet].email, userStructs[beneficiaryWallet].index);
-      
+
       return true;
   }
 
   function updateBeneficiaryEmail(address beneficiaryWallet, bytes32 beneficiaryEmail) public onlyOwner returns (bool success) {
-      require(checkIfBeneficiary(beneficiaryWallet));
+      require(checkIfBeneficiary(beneficiaryWallet), "Address not a beneficiary");
       userStructs[beneficiaryWallet].email = beneficiaryEmail;
-      
+
       // Button gets hit here as we know the owner is alive
       hitTheDamnButton();
 
       emit BeneficiaryUpdated(beneficiaryWallet, userStructs[beneficiaryWallet].nickname,  beneficiaryEmail, userStructs[beneficiaryWallet].index);
-      
+
       return true;
   }
 
@@ -100,7 +100,7 @@ contract BeneficiaryRoleController is DeadOrAliveController {
   }
 
 
-  function updateDefaultErc721ApprovedUser(address defaultUser) public onlyOwner returns (address newDefault) {
+  function updateDefaultErc721ApprovedUser(address payable defaultUser) public onlyOwner returns (address newDefault) {
     require(checkIfBeneficiary(defaultUser), "Only beneficiaries are authorized to be default erc721 approved user");
       defaultErc721ApprovedUser = defaultUser;
       // Button gets hit here as we know the owner is alive

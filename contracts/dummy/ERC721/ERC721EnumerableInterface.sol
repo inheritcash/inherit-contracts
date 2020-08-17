@@ -1,6 +1,6 @@
 pragma solidity ^0.5.8;
 
-import "../../tokens/ERC721Interface.sol";
+import "./ERC721Interface.sol";
 
 // Open Zepellin implementation
 /**
