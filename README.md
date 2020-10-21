@@ -19,6 +19,10 @@ This project presents control for blockchain actions of real life users, which c
 
 This project has been built up from various online sources including Open Zepellin and EIP standards.
 
+## Check test-config.ts
+
+You should add a valid 12 word mnemonic phrase and rpc node connection url string into `./test-config.ts`
+
 ## Compile and run tests
 
 Install Ganache-cli first, allow unlimited contract size as it is a big one, needs to be deployed as an automated contract
