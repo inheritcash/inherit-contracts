@@ -26,7 +26,7 @@
     "rlp": "^2.1.0",
     "rxjs": "~6.3.3",
     "truffle": "^5.0.4",
-    "truffle-hdwallet-provider": "0.0.6",
+    "truffle-hdwallet-provider": "1.0.17",
     "tslib": "^1.9.0",
     "web3": "^1.0.0-beta.55",
     "zone.js": "~0.8.26"
